@@ -1,14 +1,13 @@
 # Site settings
-title: Your awesome title
-email: your-email@domain.com
+title: Not Mandatory
+email: steven.myers@gmail.com
+gpg_fingerprint: 5CA0 3455 3F07 0BEE C888  6F6C 410B AE75 60AC 3F61
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Steve Myers site for personal projects and contact information.
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-twitter_username: jekyllrb
-github_username:  jekyll
+url: "http://stevemyers.github.io" # the base hostname & protocol for your site
+twitter_username: stevemyers_
+github_username:  stevemyers
 
 # Build settings
 markdown: kramdown
