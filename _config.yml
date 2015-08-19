@@ -3,7 +3,7 @@ title: Not Mandatory
 email: steven.myers@gmail.com
 gpg_fingerprint: 5CA0 3455 3F07 0BEE C888  6F6C 410B AE75 60AC 3F61
 description: > # this means to ignore newlines until "baseurl:"
-  Steve Myers site for personal projects and contact information.
+  Steve Myers software projects blog and current contact information.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://stevemyers.github.io" # the base hostname & protocol for your site
 twitter_username: stevemyers_
