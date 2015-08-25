@@ -7,7 +7,7 @@
         <ul class="contact-list">
           <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
           {% if site.gpg_fingerprint %}
-          <li>{{site.gpg_fingerprint}}</li>
+          <li>gpg fingerprint: {{site.gpg_fingerprint}}</li>
           {% endif %}
         </ul>
       </div>
@@ -42,6 +42,19 @@
             </a>
           </li>
           {% endif %}
+            {% if site.gpg_pubkey_file %}
+            <li>
+                <a href="{{ site.gpg_pubkey_file }}">
+              <span class="icon icon--gpgpubkey">
+                <svg viewBox="0 0 16 16">
+                    <path fill="#828282" d="M 11,0 C 8.2385,0 6,2.2385 6,5 6,5.313 6.029,5.619 6.084,5.916 L 0,12 0,15 c 0,0.55225 0.44775,1 1,1 l 1,0 0,-1 2,0 0,-2 2,0 0,-2 2,0 1.2975,-1.2975 C 9.829,9.895 10.40225,10 11,10 13.7615,10 16,7.7615 16,5 16,2.2385 13.7615,0 11,0 Z m 1.498,5.002 c -0.8285,0 -1.5,-0.6715 -1.5,-1.5 0,-0.8285 0.6715,-1.5 1.5,-1.5 0.8285,0 1.5,0.6715 1.5,1.5 0,0.8285 -0.6715,1.5 -1.5,1.5 z"/>
+                </svg>
+              </span>
+
+                    <span class="gpgpubkey">gpg public key</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
       </div>
 
