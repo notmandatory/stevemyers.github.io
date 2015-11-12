@@ -1,8 +1,8 @@
 # Site settings
 title: Not Mandatory
-email: steven.myers@gmail.com
-gpg_fingerprint: 5CA0 3455 3F07 0BEE C888  6F6C 410B AE75 60AC 3F61
-gpg_pubkey_file: /steven_myers_gmail.gpg
+email: steve@notmandatory.org
+gpg_fingerprint: E3DE 1EFC 18CC 0C9B 36E1  E146 4D70 01D3 C9BA D1F4
+gpg_pubkey_file: /steve_notmandatory.gpg
 description: > # this means to ignore newlines until "baseurl:"
   Steve Myers software projects blog and current contact information.
 baseurl: "" # the subpath of your site, e.g. /blog/
