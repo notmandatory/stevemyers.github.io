@@ -4,6 +4,6 @@ title:  "New Email and GPG Public Key"
 date:   2015-11-12 03:30:00
 categories: blog update
 ---
-I've just discovered google's awesome new [DNS domain service](https://en.wikipedia.org/wiki/Google_Domains), [Google Domains](https://domains.google.com/).  It's much easier to use and cheaper than the one I was using before and includes free private registration, domain forwarding and email forwarding.  I've thus also created a new email address, [steve@notmandatory.org](mailto:steve@notmandatory.org) and corresponding new [gpg public key](/steve_notmandatory.gpg).
+I've just discovered google's awesome new [DNS domain service](https://en.wikipedia.org/wiki/Google_Domains), [Google Domains](https://domains.google.com/).  It's much easier to use and cheaper than the one I was using before and includes free private registration, domain forwarding and email forwarding.  I've thus also created a new email address [steve@notmandatory.org](mailto:steve@notmandatory.org) and corresponding new [gpg public key](/steve_notmandatory.gpg).
 
-My old *steven_myers@gmail.com* gpg public key is still hosted [here](/steven_myers_gmail.gpg).
+My old *steven.myers@gmail.com* gpg public key is still hosted [here](/steven_myers_gmail.gpg).
