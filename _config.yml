@@ -9,6 +9,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://notmandatory.org" # the base hostname & protocol for your site
 twitter_username: stevemyers_
 github_username:  stevemyers
+linkedin_username: smyers3
 
 # Build settings
 markdown: kramdown
