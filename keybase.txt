@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/smyers
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://notmandatory.org
+  * I am smyers (https://keybase.io/smyers) on keybase.
+  * I have a public key ASDO-0xq-kj5M643KS1nqPDqcOhc2y0mFDvnIMci6Gqmjgo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01017e0a052271d0b28ecb99885c265f91b44bb63b51ad20ce765f6c149ece26fa1e0a",
+      "host": "keybase.io",
+      "kid": "0120cefb4c6afa48f933ae37292d67a8f0ea70e85cdb2d26143be720c722e86aa68e0a",
+      "uid": "1211695a86e03d7cc196015cf3cdc400",
+      "username": "smyers"
+    },
+    "merkle_root": {
+      "ctime": 1530337962,
+      "hash": "cd8dad610e65d6c2c053db7570aed71ddf10dce66a327930495df2ffdc2a6a0535085e86855edd0fede12a0bed9223940dd3e657679739b73dd9771fe38ebc79",
+      "hash_meta": "3aa2428dadc10c0c364a35107fb61dd632bf213aba723e335cb73505d21da7f5",
+      "seqno": 3178384
+    },
+    "service": {
+      "entropy": "i3KiIOMa/CSACeulqVZFfDcK",
+      "hostname": "notmandatory.org",
+      "protocol": "http:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "2.1.2"
+  },
+  "ctime": 1530338050,
+  "expire_in": 504576000,
+  "prev": "0d197ee1bbb4daa1cd4feaeb8aa2957f39711bc560c66b51f8182fa1c25967b5",
+  "seqno": 39,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgzvtMavpI+TOuNyktZ6jw6nDoXNstJhQ75yDHIuhqpo4Kp3BheWxvYWTESpcCJ8QgDRl+4bu02qHNT+rriqKVfzlxG8VgxmtR+BgvocJZZ7XEINZRFG1ZftbFJTXMR83En/IXB7/xxccF1FmjdwhzuxGJAgHCo3NpZ8RAfns7tV21zLpU/oyJeqGDTflzIn/Bb6B0A4edaiUupSvE9mNQNgAIXlEfUmYy970plgEy43pUmGC3w4SQ0ho7DqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIKitXtDtLpnHeamWyCGyKjqBzO4OHxFAxZJ0V+KI53f9o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/smyers
+
+==================================================================
