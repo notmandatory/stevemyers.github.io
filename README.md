@@ -25,3 +25,8 @@
   ```
  
  See [jekyll](http://jekyllrb.com/docs/usage/) site for more usage instructions.
+ 
+ 
+**Icon generator**
+
+https://www.favicon-generator.org/

@@ -7,8 +7,10 @@ description: > # this means to ignore newlines until "baseurl:"
   Steve Myers software projects blog and current contact information.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://notmandatory.org" # the base hostname & protocol for your site
+mastodon_username: notmandatory
+mastodon_host: bitcoinhackers.org
 twitter_username: stevemyers_
-github_username:  stevemyers
+bitbucket_username:  stevemyers
 linkedin_username: smyers3
 
 # Build settings
