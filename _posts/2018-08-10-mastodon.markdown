@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Hello Mastodon"
+title:  "Mastodon"
 date:   2018-08-10 09:30:00
 categories: blog update
 ---
