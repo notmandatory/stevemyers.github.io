@@ -7,6 +7,7 @@ categories: bitcoin
 Here's a short list of podcasts I'm listening to these days :
 
 * [The Coin Pod](https://www.stitcher.com/podcast/you-me-and-btc/the-coin-pod), Conversations with individuals actively contributing to the development of Bitcoin
+* [Crypto Voices](https://cryptovoices.com/)
 * [Let's Talk Bitcoin](https://letstalkbitcoin.com/blog/category/episodes), a Bitcoin classic, I've been a listener since early days
 * [Noded](https://noded.org), Bitcoin current events, technical news, and commentary
 * [ReasonTV](https://reason.com/reasontv), Libertarian's talking news of the day
