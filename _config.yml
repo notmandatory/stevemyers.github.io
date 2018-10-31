@@ -11,7 +11,6 @@ mastodon_username: notmandatory
 mastodon_host: bitcoinhackers.org
 twitter_username: stevemyers_
 bitbucket_username:  stevemyers
-linkedin_username: smyers3
 
 # Build settings
 markdown: kramdown
