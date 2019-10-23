@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-Entrepreneur, software engineer, anarcho-capitalist. Pro-bitcoin. Anti-authoritarian.
+Builder of software, networks, and servers, big and small. Pro-#bitcoin. Anti-authoritarian.
