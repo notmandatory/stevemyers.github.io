@@ -9,7 +9,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://notmandatory.org" # the base hostname & protocol for your site
 mastodon_username: notmandatory
 mastodon_host: bitcoinhackers.org
-twitter_username: stevemyers_
+twitter_username: notmandatory
 bitbucket_username:  stevemyers
 
 # Build settings
