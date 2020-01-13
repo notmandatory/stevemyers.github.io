@@ -1,0 +1,34 @@
+# The URL the site will be built for
+base_url = "https://notmandatory.org"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = true
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = false
+
+generate_rss = true
+
+title = "Not Mandatory"
+description = "Steve Myers blog and current contact information."
+
+taxonomies = [
+       {name = "tags"},
+       {name = "categories"},
+     ]
+
+[extra]
+# Put all your custom variables here
+
+title_image = "notmandatory.jpg"
+github_username = "notmandatory"
+twitter_username = "notmandatory"
+mastodon_username = "notmandatory"
+mastodon_host = "bitcoinhackers.org"
+email = "steve@notmandatory.org"
+gpg_fingerprint = "E3DE 1EFC 18CC 0C9B 36E1  E146 4D70 01D3 C9BA D1F4"
+gpg_pubkey_file = "/steve_notmandatory.gpg"

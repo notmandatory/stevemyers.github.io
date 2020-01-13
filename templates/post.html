@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-meta">{{ page.date | date(format="%b %-d, %Y") }}{% if page.extra.author %} • {{ page.extra.author }}{% endif %}{% if page.extra.meta %} • {{ page.extra.meta }}{% endif %}</p>
+  </header>
+
+  <article class="post-content">
+    {{ page.content | safe }}
+  </article>
+
+</div>
+{% endblock content %}
