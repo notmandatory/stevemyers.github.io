@@ -1,6 +1,6 @@
-# BitDevs LA
+# Not Mandatory Blog
 
-Simple Zola site for hosting all of the links from meetups past and future.
+Simple Zola site for hosting my projects blog and contact info.
 
 ## Development
 
@@ -21,8 +21,6 @@ following information:
 +++
 title = "<title goes here>"
 template = "post.html"
-[extra]
-meetup_id = "<optional meetup id goes here>"
 +++
 ```
 
@@ -32,8 +30,3 @@ The site will auto-generate the rest.
 ## Changing Site Data
 
 All site configurations are contained in `config.toml`.
-
-## Attributions
-
-Thanks to [BitDevs NYC](https://github.com/BitDevsNYC/BitDevsNYC.github.io) for the
-Jekyll site that this site is based on.
