@@ -1,6 +1,6 @@
 +++
 template = "post.html"
-title = "My Regtest docker-compose Repo"
+title = "Regtest docker-compose Repo"
 
 [taxonomies]
 tags = ["bitcoin", "docker"]

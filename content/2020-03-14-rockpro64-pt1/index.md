@@ -1,6 +1,6 @@
 +++
 template = "post.html"
-title = "Building my ROCKPro64 System, Part 1"
+title = "ROCKPro64 System, Part 1"
 
 [taxonomies]
 tags = ["pine64", "linux"]
