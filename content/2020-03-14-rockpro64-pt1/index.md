@@ -38,7 +38,7 @@ Unfortunately half the parts I ordered from Pine64 were mistakenly omitted from 
 Lunar New Year and the COVID-19 epidemic in China the remaining parts were delayed until just last week. I have to 
 commend the Pine64 support team for doing their best in a difficult situation. 
 
-For the actually hardware assembly I recommend checking out the [RockPro64 wiki page](https://wiki.pine64.org/index.php/ROCKPro64)
+For hardware assembly instructions I used the [RockPro64 wiki page](https://wiki.pine64.org/index.php/ROCKPro64)
 and in particular the [NAS Case page](https://wiki.pine64.org/index.php/ROCKPro64#The_NAS_Case_for_the_ROCKPro64). I found
 the youtube video ["PINE64 ROCKPro64 NAS Case Getting Started"](https://youtu.be/_UeeklKo0Og) from ameriDroid very helpful.
 
@@ -46,7 +46,7 @@ For the OS install I first installed [Etcher](https://etcher.io/) on my laptop, 
 [Armbian Buster](https://www.armbian.com/rockpro64/) image and loaded it onto my eMMC module using my eMMC USB adapter.
 This process was very easy, just select the image, select the empty eMMC removable drive, and go. Once written I 
 removed the eMMC from the USB adapter and plugged it into the ROCK64Pro board. Attaching the module to the board is a little 
-tricky because it a very small connector. If I were to do this again I'd install the eMMC and the WiFi boards on the
+tricky because it is a very small connector. If I were to do this again I'd install the eMMC and the WiFi boards on the
 main ROCKPro64 board before putting the main board it into the NAS case. 
 
 Next I connected my ROCKPro64 to an ethernet switch and plugged in its power supply. I also attached a HDMI monitor and 
@@ -60,8 +60,8 @@ I completed the final setup steps below using the very handy `sudo armbian-confi
 1. Configure SSH to disable `root` and `password` login
 1. Set my local timezone
 
-When I tried to configure the WiFi interface I got disconnected and had to hard reboot. I need to do more 
-research to figure out if there's a way to get the WiFi module work with Linux. I read somewhere that it's currently 
+When I tried to configure the WiFi interface I got disconnected and had to hard reboot the system. I need to do more 
+research to figure out if there's a way to get the WiFi module to work with Linux. I read somewhere that it's currently 
 only supported for Android.
 
 ![rockpro64](rockpro64.jpg)
