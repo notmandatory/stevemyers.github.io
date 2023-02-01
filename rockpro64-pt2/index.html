@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Not Mandatory</title>
+    <meta name="description"
+          content="Steve Myers blog and current contact information.">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/fa-all.css">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/icon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon/favicon-16x16.png">
+    <link rel="manifest" href="/img/icon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/img/icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="wrapper">
+
+        <a class="site-title" href="https:&#x2F;&#x2F;notmandatory.org/">
+            <img src="/img/notmandatory.jpg" alt="Not Mandatory">
+        </a>
+
+        <nav class="site-nav">
+            <div class="trigger">
+                
+                <a class="page-link" href="https:&#x2F;&#x2F;notmandatory.org&#x2F;">Home</a>
+                
+                
+                
+                
+                <a class="page-link" href="https:&#x2F;&#x2F;notmandatory.org&#x2F;about&#x2F;">About</a>
+                
+                
+                
+            </div>
+        </nav>
+
+    </div>
+
+</header>
+
+<div class="page-content">
+    <div class="wrapper">
+
+        
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">ROCKPro64 System, Part 2</h1>
+    <p class="post-meta">Mar 17, 2020</p>
+  </header>
+
+  <article class="post-content">
+    <p>After my initial setup I found I was unable to format my SATA SSD drives. After trying various things and reading about
+others with similar problems I determined that I had a bad SATA interface card. The <a href="https://store.pine64.org/?product=rockpro64-pci-e-to-dual-sata-ii-interface-card">PCI-e SATA card</a> 
+I bought from Pine64 store only cost $9.99, so I didn't mind too much having to get a better one. I bought a <a href="https://www.amazon.com/gp/product/B07VZZ11GB">JESOT SATA Card</a>
+from Amazon for just $24.99 which came with an 8cm back bracket that fits perfectly in my Pine64 NAS case. </p>
+<p>Now that I have a working SATA card I was able to proceed with formating my SSD drive and building and installing the 
+bitcoind software. The steps I followed are:</p>
+<ol>
+<li>
+<p>update apt and install LVM</p>
+<pre><code>sudo apt update
+sudo apt install lvm2
+</code></pre>
+</li>
+<li>
+<p>add a new <code>bitcoin</code> system user and group</p>
+<pre><code>sudo adduser --system --home &#x2F;var&#x2F;lib&#x2F;bitcoind --group bitcoin
+</code></pre>
+</li>
+<li>
+<p>identify and create partitions for the whole disk on my two SATA SSD drive</p>
+<pre><code>sudo &#x2F;sbin&#x2F;lvmdiskscan
+fdisk &#x2F;dev&#x2F;sda
+fdisk &#x2F;dev&#x2F;sdb
+</code></pre>
+</li>
+<li>
+<p>create LVM physical volumes, volume group, and logical volume</p>
+<pre><code>sudo pvcreate &#x2F;dev&#x2F;sda1
+sudo pvcreate &#x2F;dev&#x2F;sdb1
+sudo vgcreate rockpro64 &#x2F;dev&#x2F;sda1 &#x2F;dev&#x2F;sdb1
+sudo lvcreate -n bitcoin -L 500g rockpro64
+</code></pre>
+</li>
+<li>
+<p>format my new 500GB logical volume, identify it's UUID and mount it via fstab</p>
+<pre><code>sudo mkfs.ext4 &#x2F;dev&#x2F;rockpro64&#x2F;bitcoin
+sudo mkdir &#x2F;var&#x2F;lib&#x2F;bitcoind
+sudo chown bitcoin:bitcoin &#x2F;var&#x2F;lib&#x2F;bitcoind
+sudo blkid
+sudo vi &#x2F;etc&#x2F;fstab
+</code></pre>
+<p>add line to /etc/fstab:</p>
+<pre><code>UUID=&lt;THE UUID OF MY NEW LOGICAL PARTITION&gt; &#x2F;var&#x2F;lib&#x2F;bitcoind ext4 errors=remount-ro 0 1
+</code></pre>
+</li>
+<li>
+<p>install git and other tools needed to build the bitcoind software</p>
+<pre><code>sudo apt install git
+sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+sudo apt-get install build-essential libtool autotools-dev autoconf pkg-config libssl-dev libdb-dev libdb++-dev libevent-dev
+</code></pre>
+</li>
+<li>
+<p>clone and build bitcoind</p>
+<pre><code>git clone https:&#x2F;&#x2F;github.com&#x2F;bitcoin&#x2F;bitcoin
+cd bitcoin
+git checkout v0.19.1
+.&#x2F;autogen.sh
+.&#x2F;configure --without-gui --with-incompatible-bdb
+make -j4
+</code></pre>
+</li>
+<li>
+<p>install the bitcoin binaries</p>
+<pre><code>cd src
+sudo install -sv bitcoind bitcoin-cli &#x2F;usr&#x2F;local&#x2F;bin
+sudo chown bitcoin:bitcoin &#x2F;usr&#x2F;local&#x2F;bin&#x2F;bitcoin*
+</code></pre>
+</li>
+<li>
+<p>copy and install default bitcoin.conf</p>
+<pre><code>sudo mkdir &#x2F;etc&#x2F;bitcoin
+sudo chown bitcoin:bitcoin &#x2F;etc&#x2F;bitcoin
+sudo cp share&#x2F;examples&#x2F;bitcoin.conf &#x2F;etc&#x2F;bitcoin
+sudo chown bitcoin:bitcoin &#x2F;etc&#x2F;bitcoin&#x2F;bitcoin.conf
+</code></pre>
+</li>
+<li>
+<p>copy, edit, and install bitcoind.service </p>
+<pre><code>sudo mkdir &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system
+sudo cp contrib&#x2F;init&#x2F;bitcoind.service &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system
+</code></pre>
+<p>change bitcoind path in bitcoind.service to /usr/local/bin/bitcoind</p>
+<pre><code>vi &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;bitcoind.service 
+</code></pre>
+</li>
+<li>
+<p>create /run/bitcoind directory, reload systemd services and start the bitcoin daemon! </p>
+<pre><code>sudo mkdir &#x2F;run&#x2F;bitcoind
+sudo chown bitcoin:bitcoin &#x2F;run&#x2F;bitcoind
+sudo systemctl daemon-reload
+sudo systemctl start bitcoind
+</code></pre>
+</li>
+<li>
+<p>finally I checked the status of my initial block download by tailing the debug.log</p>
+<pre><code>sudo tail -f &#x2F;var&#x2F;lib&#x2F;bitcoind&#x2F;debug.log
+</code></pre>
+<p>After a few hours I'm almost 25% done with syncing:</p>
+<p><code>2020-03-18T03:49:29Z UpdateTip: new best=000000000000000000b0051a304dddb1e8a308f768362234bc9d1000856488ae height=410146 version=0x20000000 log2_work=84.597965 tx=126645632 date='2016-05-04T05:10:24Z' progress=0.245593 cache=351.3MiB(2403347txo)</code></p>
+<p>And my small but mighty RockPro64 is barely breaking a sweat:</p>
+<pre><code>sudo armbianmonitor -M
+Stop monitoring using [ctrl]-[c]
+Time       big.LITTLE   load %cpu %sys %usr %nice %io %irq   CPU  C.St.
+21:01:35: 1800&#x2F;1512MHz  1.62  18%   3%  13%   0%   1%   0% 52.2°C  0&#x2F;3
+</code></pre>
+</li>
+</ol>
+
+  </article>
+
+</div>
+
+
+    </div>
+</div>
+
+<footer class="site-footer">
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col  footer-col-1">
+                <ul class="contact-list">
+                    <li><a href="mailto:steve@notmandatory.org">steve@notmandatory.org</a></li>
+                    
+                    <li>gpg fingerprint: D9FF 9010 BE16 9B64 D3ED  CBF9 8105 A46B 22C2 D051</li>
+                    
+                </ul>
+            </div>
+
+            <div class="footer-col  footer-col-2">
+                <ul class="social-media-list">
+                    
+                    
+                    <li>
+                        <a href="https://github.com/notmandatory">
+                            <span class="fab fa-github fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://bitcoinhackers.org/@notmandatory">
+                            <span class="fab fa-mastodon fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                            <span class="username">@bitcoinhackers.org</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/notmandatory">
+                            <span class="fab fa-twitter-square fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="&#x2F;steve_notmandatory.gpg">
+                            <span class="fas fa-user-secret fa-lg"></span>
+                            <span class="username">gpg public key</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <div class="footer-col  footer-col-3">
+                <p class="text">Steve Myers blog and current contact information.</p>
+            </div>
+        </div>
+
+    </div>
+
+</footer>
+
+</body>

@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Not Mandatory</title>
+        <link>https://notmandatory.org</link>
+        <description>Steve Myers blog and current contact information.</description>
+        <generator>Zola</generator>
+        <language>en</language>
+        <atom:link href="https://notmandatory.org/rss.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Wed, 03 Feb 2021 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>ROCKPro64 System, Updates</title>
+            <pubDate>Wed, 03 Feb 2021 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/rockpro64-upgrades/</link>
+            <guid>https://notmandatory.org/rockpro64-upgrades/</guid>
+            <description>&lt;p&gt;It&#x27;s been a few months since I last worked on my ROCKPro64 system so today I did some overdue 
+updates. The main impetus for updating was to make sure my system security isn&#x27;t at risk due to 
+the recently announced &lt;code&gt;sudo&lt;&#x2F;code&gt; vulnerability &lt;a href=&quot;https:&#x2F;&#x2F;blog.qualys.com&#x2F;vulnerabilities-research&#x2F;2021&#x2F;01&#x2F;26&#x2F;cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit&quot;&gt;CVE-2021-3156&lt;&#x2F;a&gt;. Even though I&#x27;m the only user on my 
+little server it&#x27;s best to not take any chances. &lt;&#x2F;p&gt;
+&lt;p&gt;The other important update I wanted to do is to bring my &lt;code&gt;bitcoind&lt;&#x2F;code&gt; daemon up to the latest and 
+greatest version &lt;a href=&quot;https:&#x2F;&#x2F;bitcoin.org&#x2F;en&#x2F;release&#x2F;v0.21.0&quot;&gt;bitcoin core 0.21.0&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;upgrade OS packages&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;sudo apt update
+sudo apt upgrade
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;verify &lt;code&gt;sudo&lt;&#x2F;code&gt; is patched. Per the &lt;a href=&quot;https:&#x2F;&#x2F;blog.qualys.com&#x2F;vulnerabilities-research&#x2F;2021&#x2F;01&#x2F;26&#x2F;cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit&quot;&gt;CVE-2021-3156&lt;&#x2F;a&gt; FAQ if your system is vulnerable the below 
+command will respond with an error that starts with “sudoedit:”. If your system is patched, it 
+will respond with an error that starts with “usage:”&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;sudoedit -s &amp;#x2F; 
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;update &lt;code&gt;bitcoin&lt;&#x2F;code&gt; core git repo and checkout the &lt;code&gt;v0.21.0&lt;&#x2F;code&gt; tag&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;cd git&amp;#x2F;bitcoin ## or where ever you keep your bitcoin core repo clone
+git fetch --all
+git checkout v0.21.0
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;re-build &lt;code&gt;bitcoind&lt;&#x2F;code&gt; this time without the wallet, I only need a P2P node&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;.&amp;#x2F;autogen.sh
+.&amp;#x2F;configure --without-gui --disable-wallet 
+make
+strip src&amp;#x2F;bitcoind
+strip src&amp;#x2F;bitcoin-cli
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Note: if I cross-compiled this ARM build on my desktop linux system it should go a lot faster,
+I will try that next time&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install the bitcoin binaries&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;sudo systemctl stop bitcoind
+sudo install -sv src&amp;#x2F;bitcoind src&amp;#x2F;bitcoin-cli &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin
+sudo chown bitcoin:bitcoin &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin&amp;#x2F;bitcoin*
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;verify the new version of bitcoind is installed&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;$ &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin&amp;#x2F;bitcoind --version
+Bitcoin Core version v0.21.0
+Copyright (C) 2009-2020 The Bitcoin Core developers
+
+Please contribute if you find Bitcoin Core useful. Visit
+&amp;lt;https:&amp;#x2F;&amp;#x2F;bitcoincore.org&amp;#x2F;&amp;gt; for further information about the software.
+The source code is available from &amp;lt;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;bitcoin&amp;#x2F;bitcoin&amp;gt;.
+
+This is experimental software.
+Distributed under the MIT software license, see the accompanying file COPYING
+or &amp;lt;https:&amp;#x2F;&amp;#x2F;opensource.org&amp;#x2F;licenses&amp;#x2F;MIT&amp;gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;restart bitcoind and verify it started up successfully &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;shell&quot; class=&quot;language-shell &quot;&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;sudo systemctl start bitcoind
+sudo systemctl status bitcoind
+sudo tail -f &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;debug.log ## stop tail with control-C
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</description>
+        </item>
+        <item>
+            <title>ROCKPro64 System, Part 4</title>
+            <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/rockpro64-pt4/</link>
+            <guid>https://notmandatory.org/rockpro64-pt4/</guid>
+            <description>&lt;p&gt;Here are some additional instructions for my twitter friend &lt;a href=&quot;https:&#x2F;&#x2F;twitter.com&#x2F;FullNodeCustoms&quot;&gt;pacman&lt;&#x2F;a&gt;
+who is the first person (I know of) to use my instructions to build his own ROCKPro64 based bitcoin node.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;setup-local-bitcoin-cli-access&quot;&gt;Setup local bitcoin-cli access&lt;&#x2F;h3&gt;
+&lt;p&gt;This is the recommended way to enable RPC access for other programs running on the same computer
+to your bitcoin full node. You will need to have python installed and access to the bitcoin source 
+you cloned via git from my post &lt;a href=&quot;https:&#x2F;&#x2F;notmandatory.org&#x2F;rockpro64-pt2&#x2F;&quot;&gt;ROCKPro64 System, Part 2&lt;&#x2F;a&gt; 
+step 7.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Install python if it&#x27;s not already installed&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt install python
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Create a new bitcoin rpc auth token&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;cd bitcoin&amp;#x2F;share&amp;#x2F;rpcauth
+.&amp;#x2F;rpcauth.py &amp;lt;username&amp;gt; 
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;be sure to save the password you get from this command under where it says &amp;quot;Your password:&amp;quot;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;edit the &lt;code&gt;bitcoin.conf&lt;&#x2F;code&gt; file and enable rpc access by enabling server mode&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vi &amp;#x2F;etc&amp;#x2F;bitcoin&amp;#x2F;bitcoin.conf
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;remove the # to uncomment out the server line, it will look like this&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;server=1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Add your new rpc auth token to your bitcoin.conf file&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vi &amp;#x2F;etc&amp;#x2F;bitcoin&amp;#x2F;bitcoin.conf
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The line that you add to bitcoin.conf will look something like this&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;rpcauth=test:ca224c4c2208da68dba6dff12e8f0b09$63e0f5813424b92407e9d4c033de57b718ff41c0b9e7827f6ce7b5bfa62e3e8b
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;restart bitcoind&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo systemctl restart bitcoind
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;you can now run &lt;code&gt;bitcoin-cli&lt;&#x2F;code&gt; commands from your own user account, you just need to provide the
+password generated by the &lt;code&gt;rpcauth.py&lt;&#x2F;code&gt; program&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;bitcoin-cli -rpcuser=test -rpcpassword=&amp;lt;A_LONG_RANDOM_STRING=&amp;gt; help
+bitcoin-cli -rpcuser=test -rpcpassword=&amp;lt;A_LONG_RANDOM_STRING=&amp;gt; getpeerinfo
+etc.
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;As stated in the bitcoin.conf file you can add multiple rpcauth lines to the same &lt;code&gt;bitcoin.conf&lt;&#x2F;code&gt; 
+file so you can use different auth tokens for each app that is accessing your node.&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>ROCKPro64 System, Part 3</title>
+            <pubDate>Mon, 06 Apr 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/rockpro64-pt3/</link>
+            <guid>https://notmandatory.org/rockpro64-pt3/</guid>
+            <description>&lt;p&gt;In this post I detail the steps needed to enable fan control, install electrs Electrum personal server, and install and
+configure nginx to provide an SSL proxy for the electrs server, to make it easy to use with the Electrum client software. &lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;enable the case fan using Active Thermal Service, follow &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;tuxd3v&#x2F;ats&quot;&gt;github instruction&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install c language and git (if not already installed)&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt install clang git
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install rust tools per &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;tools&#x2F;install&quot;&gt;rust-lang.org&#x2F;tools&#x2F;install&lt;&#x2F;a&gt; instructions&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;curl --proto &amp;#x27;=https&amp;#x27; --tlsv1.2 -sSf https:&amp;#x2F;&amp;#x2F;sh.rustup.rs | sh
+source $HOME&amp;#x2F;.cargo&amp;#x2F;env
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;clone and build the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;romanz&#x2F;electrs&quot;&gt;electrs&lt;&#x2F;a&gt; project&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;git clone https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;romanz&amp;#x2F;electrs.git
+cd electrs
+cargo build --release
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;add a new &lt;code&gt;electrs&lt;&#x2F;code&gt; system user and make it part of bitcoin group&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo adduser --system --home &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs --ingroup bitcoin electrs
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create a new LVM logical volume for electrs data, I allocate 40% of bitcoin volume size which is needed during 
+indexing, but can lowered later after the indexes are compacted if I need the space back. &lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo lvcreate -n electrs -L 200g rockpro64
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;format my new electrs logical volume, identify it&#x27;s UUID and mount it via fstab&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkfs.ext4 &amp;#x2F;dev&amp;#x2F;rockpro64&amp;#x2F;electrs
+sudo blkid
+sudo vi &amp;#x2F;etc&amp;#x2F;fstab
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;add line to &#x2F;etc&#x2F;fstab:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;UUID=&amp;lt;THE UUID OF MY NEW LOGICAL PARTITION&amp;gt; &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs ext4 errors=remount-ro 0 1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre&gt;&lt;code&gt;sudo mount -a
+sudo chown electrs:bitcoin &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs
+sudo chmod -R o-rwx &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs
+sudo chmod u+rxw &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs
+sudo chmod g+x &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;copy electrs binary to &#x2F;var&#x2F;lib&#x2F;electrs&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs&amp;#x2F;bin
+sudo chown electrs:bitcoin &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs&amp;#x2F;bin
+sudo cp target&amp;#x2F;release&amp;#x2F;electrs &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs&amp;#x2F;bin
+sudo chown electrs:bitcoin &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs&amp;#x2F;bin&amp;#x2F;electrs
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create systemd startup file for electrs &lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vi &amp;#x2F;usr&amp;#x2F;lib&amp;#x2F;systemd&amp;#x2F;system&amp;#x2F;electrs.service
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and add below content to file&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[Unit]
+Description=Electrs
+After=bitcoind.service
+
+[Service]
+WorkingDirectory=&amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs
+ExecStart=&amp;#x2F;var&amp;#x2F;lib&amp;#x2F;electrs&amp;#x2F;bin&amp;#x2F;electrs -vvv --db-dir .&amp;#x2F;db --index-batch-size=10 --jsonrpc-import --cookie-file &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;.cookie --daemon-dir &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind --electrum-rpc-addr=&amp;quot;127.0.0.1:50001&amp;quot;
+User=electrs
+Group=bitcoin
+Type=simple
+KillMode=process
+TimeoutSec=60
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;edit the bitcoind service to enable the rpc server, restart bitcoind&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vi &amp;#x2F;usr&amp;#x2F;lib&amp;#x2F;systemd&amp;#x2F;system&amp;#x2F;bitcoind.service
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;add &lt;code&gt;-server=1&lt;&#x2F;code&gt; to the ExecStart line&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo systemctl daemon-reload
+sudo systemctl restart bitcoind
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;update the permission for bitcoind .cookie file so electrs can use it to connect to the bitcoind rpc api&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo chmod -R g+r &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;
+sudo chmod g+x &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind
+sudo chmod g+x &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;blocks &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;chainstate &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;database
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create &#x2F;run&#x2F;electrs directory, reload systemd services and start the electrs daemon&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;run&amp;#x2F;electrs
+sudo chown electrs:bitcoin &amp;#x2F;run&amp;#x2F;electrs
+sudo systemctl daemon-reload
+sudo syste:qqmctl start electrs
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At this point electrs will start indexing, this took almost 24 hours on my system. &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install nginx&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt install nginx
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create a new nginx cert&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;ssl
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;ssl&amp;#x2F;nginx.key -out &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;ssl&amp;#x2F;nginx.crt
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;add the below block to the nginx config file&lt;&#x2F;p&gt;
+&lt;p&gt;sudo vi &#x2F;etc&#x2F;nginx&#x2F;nginx.conf&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;stream {
+        upstream electrs {
+                server 127.0.0.1:50001;
+        }
+
+        server {
+                listen 50002 ssl;
+                proxy_pass electrs;
+
+                ssl_certificate &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;ssl&amp;#x2F;nginx.crt;
+                ssl_certificate_key &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;ssl&amp;#x2F;nginx.key;
+                ssl_session_cache shared:SSL:1m;
+                ssl_session_timeout 4h;
+                ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+                ssl_prefer_server_ciphers on;
+        }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;unlink the nginx default site in the sites-active directory and restart nginx&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo rm &amp;#x2F;etc&amp;#x2F;nginx&amp;#x2F;sites-enabled&amp;#x2F;default
+sudo systemctl restart nginx
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Done! I now have an electrum server at https:&#x2F;&#x2F;localhost:50001 that I can use as a back end to an electrum client, 
+or any other service that uses the electrum server apis to browse the bitcoin block chain.&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>ROCKPro64 System, Part 2</title>
+            <pubDate>Tue, 17 Mar 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/rockpro64-pt2/</link>
+            <guid>https://notmandatory.org/rockpro64-pt2/</guid>
+            <description>&lt;p&gt;After my initial setup I found I was unable to format my SATA SSD drives. After trying various things and reading about
+others with similar problems I determined that I had a bad SATA interface card. The &lt;a href=&quot;https:&#x2F;&#x2F;store.pine64.org&#x2F;?product=rockpro64-pci-e-to-dual-sata-ii-interface-card&quot;&gt;PCI-e SATA card&lt;&#x2F;a&gt; 
+I bought from Pine64 store only cost $9.99, so I didn&#x27;t mind too much having to get a better one. I bought a &lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;gp&#x2F;product&#x2F;B07VZZ11GB&quot;&gt;JESOT SATA Card&lt;&#x2F;a&gt;
+from Amazon for just $24.99 which came with an 8cm back bracket that fits perfectly in my Pine64 NAS case. &lt;&#x2F;p&gt;
+&lt;p&gt;Now that I have a working SATA card I was able to proceed with formating my SSD drive and building and installing the 
+bitcoind software. The steps I followed are:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;update apt and install LVM&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt update
+sudo apt install lvm2
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;add a new &lt;code&gt;bitcoin&lt;&#x2F;code&gt; system user and group&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo adduser --system --home &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind --group bitcoin
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;identify and create partitions for the whole disk on my two SATA SSD drive&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo &amp;#x2F;sbin&amp;#x2F;lvmdiskscan
+fdisk &amp;#x2F;dev&amp;#x2F;sda
+fdisk &amp;#x2F;dev&amp;#x2F;sdb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create LVM physical volumes, volume group, and logical volume&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pvcreate &amp;#x2F;dev&amp;#x2F;sda1
+sudo pvcreate &amp;#x2F;dev&amp;#x2F;sdb1
+sudo vgcreate rockpro64 &amp;#x2F;dev&amp;#x2F;sda1 &amp;#x2F;dev&amp;#x2F;sdb1
+sudo lvcreate -n bitcoin -L 500g rockpro64
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;format my new 500GB logical volume, identify it&#x27;s UUID and mount it via fstab&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkfs.ext4 &amp;#x2F;dev&amp;#x2F;rockpro64&amp;#x2F;bitcoin
+sudo mkdir &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind
+sudo chown bitcoin:bitcoin &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind
+sudo blkid
+sudo vi &amp;#x2F;etc&amp;#x2F;fstab
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;add line to &#x2F;etc&#x2F;fstab:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;UUID=&amp;lt;THE UUID OF MY NEW LOGICAL PARTITION&amp;gt; &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind ext4 errors=remount-ro 0 1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install git and other tools needed to build the bitcoind software&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt install git
+sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+sudo apt-get install build-essential libtool autotools-dev autoconf pkg-config libssl-dev libdb-dev libdb++-dev libevent-dev
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;clone and build bitcoind&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;git clone https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;bitcoin&amp;#x2F;bitcoin
+cd bitcoin
+git checkout v0.19.1
+.&amp;#x2F;autogen.sh
+.&amp;#x2F;configure --without-gui --with-incompatible-bdb
+make -j4
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;install the bitcoin binaries&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;cd src
+sudo install -sv bitcoind bitcoin-cli &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin
+sudo chown bitcoin:bitcoin &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin&amp;#x2F;bitcoin*
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;copy and install default bitcoin.conf&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;etc&amp;#x2F;bitcoin
+sudo chown bitcoin:bitcoin &amp;#x2F;etc&amp;#x2F;bitcoin
+sudo cp share&amp;#x2F;examples&amp;#x2F;bitcoin.conf &amp;#x2F;etc&amp;#x2F;bitcoin
+sudo chown bitcoin:bitcoin &amp;#x2F;etc&amp;#x2F;bitcoin&amp;#x2F;bitcoin.conf
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;copy, edit, and install bitcoind.service &lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;usr&amp;#x2F;lib&amp;#x2F;systemd&amp;#x2F;system
+sudo cp contrib&amp;#x2F;init&amp;#x2F;bitcoind.service &amp;#x2F;usr&amp;#x2F;lib&amp;#x2F;systemd&amp;#x2F;system
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;change bitcoind path in bitcoind.service to &#x2F;usr&#x2F;local&#x2F;bin&#x2F;bitcoind&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;vi &amp;#x2F;usr&amp;#x2F;lib&amp;#x2F;systemd&amp;#x2F;system&amp;#x2F;bitcoind.service 
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;create &#x2F;run&#x2F;bitcoind directory, reload systemd services and start the bitcoin daemon! &lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo mkdir &amp;#x2F;run&amp;#x2F;bitcoind
+sudo chown bitcoin:bitcoin &amp;#x2F;run&amp;#x2F;bitcoind
+sudo systemctl daemon-reload
+sudo systemctl start bitcoind
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;finally I checked the status of my initial block download by tailing the debug.log&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo tail -f &amp;#x2F;var&amp;#x2F;lib&amp;#x2F;bitcoind&amp;#x2F;debug.log
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;After a few hours I&#x27;m almost 25% done with syncing:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;2020-03-18T03:49:29Z UpdateTip: new best=000000000000000000b0051a304dddb1e8a308f768362234bc9d1000856488ae height=410146 version=0x20000000 log2_work=84.597965 tx=126645632 date=&#x27;2016-05-04T05:10:24Z&#x27; progress=0.245593 cache=351.3MiB(2403347txo)&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;And my small but mighty RockPro64 is barely breaking a sweat:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo armbianmonitor -M
+Stop monitoring using [ctrl]-[c]
+Time       big.LITTLE   load %cpu %sys %usr %nice %io %irq   CPU  C.St.
+21:01:35: 1800&amp;#x2F;1512MHz  1.62  18%   3%  13%   0%   1%   0% 52.2°C  0&amp;#x2F;3
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</description>
+        </item>
+        <item>
+            <title>ROCKPro64 System, Part 1</title>
+            <pubDate>Sat, 14 Mar 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/rockpro64-pt1/</link>
+            <guid>https://notmandatory.org/rockpro64-pt1/</guid>
+            <description>&lt;p&gt;Back in Jan I finally ordered a ROCKPro64. My goal with this system is to create a small quiet 
+linux system that I can use to host a Bitcoin full node. I over provisioned it a bit so I can use it 
+to self host other (TBD) services in the future. The core hardware I purchased directly from 
+&lt;a href=&quot;https:&#x2F;&#x2F;www.pine64.org&#x2F;rockpro64&#x2F;&quot;&gt;Pine64&lt;&#x2F;a&gt;, the parts list is:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Product&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Quantity&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;Price&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 4GB Single Board Computer&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$79.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 2x2 MIMO Dual Band WIFI 802.11AC&#x2F;BLUETOOTH 4.2 MODULE&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$15.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 30mm Tall Profile Heatsink&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$3.49&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 Metal Desktop&#x2F;NAS Casing&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$44.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 12V 5A US POWER SUPPLY&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$12.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;ROCKPro64 PCI-e to Dual SATA-II Interface Card&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$9.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;64GB CLASS10 MICROSD CARD&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$20.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;128GB eMMC Module&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$54.95&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;USB Adapter for eMMC Module&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$4.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Fan for ROCKPro64 Metal Desktop&#x2F;NAS casing&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$3.99&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt;
+I also bought two Samsung SSD drives from &lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;gp&#x2F;product&#x2F;B078DPCY3T&quot;&gt;Amazon&lt;&#x2F;a&gt;:
+&lt;br&gt;&lt;br&gt;&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Product&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Quantity&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;Price&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Samsung SSD 860 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-76E1T0B&#x2F;AM)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;$246.22&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt;
+Unfortunately half the parts I ordered from Pine64 were mistakenly omitted from my first shipment. Then due to the 
+Lunar New Year and the COVID-19 epidemic in China the remaining parts were delayed until just last week. I have to 
+commend the Pine64 support team for doing their best in a difficult situation. &lt;&#x2F;p&gt;
+&lt;p&gt;For hardware assembly instructions I used the &lt;a href=&quot;https:&#x2F;&#x2F;wiki.pine64.org&#x2F;index.php&#x2F;ROCKPro64&quot;&gt;RockPro64 wiki page&lt;&#x2F;a&gt;
+and in particular the &lt;a href=&quot;https:&#x2F;&#x2F;wiki.pine64.org&#x2F;index.php&#x2F;ROCKPro64#The_NAS_Case_for_the_ROCKPro64&quot;&gt;NAS Case page&lt;&#x2F;a&gt;. I found
+the youtube video &lt;a href=&quot;https:&#x2F;&#x2F;youtu.be&#x2F;_UeeklKo0Og&quot;&gt;&amp;quot;PINE64 ROCKPro64 NAS Case Getting Started&amp;quot;&lt;&#x2F;a&gt; from ameriDroid very helpful.&lt;&#x2F;p&gt;
+&lt;p&gt;For the OS install I first installed &lt;a href=&quot;https:&#x2F;&#x2F;etcher.io&#x2F;&quot;&gt;Etcher&lt;&#x2F;a&gt; on my laptop, and then downloaded the 
+&lt;a href=&quot;https:&#x2F;&#x2F;www.armbian.com&#x2F;rockpro64&#x2F;&quot;&gt;Armbian Buster&lt;&#x2F;a&gt; image and loaded it onto my eMMC module using my eMMC USB adapter.
+This process was very easy, just select the image, select the empty eMMC removable drive, and go. Once written I 
+removed the eMMC from the USB adapter and plugged it into the ROCK64Pro board. Attaching the module to the board is a little 
+tricky because it is a very small connector. If I were to do this again I&#x27;d install the eMMC and the WiFi boards on the
+main ROCKPro64 board before putting the main board it into the NAS case. &lt;&#x2F;p&gt;
+&lt;p&gt;Next I connected my ROCKPro64 to an ethernet switch and plugged in its power supply. I also attached a HDMI monitor and 
+USB keyboard. To my surprise the system came right up, first try. On start-up I was prompted to set the root password and
+setup my first user account. Next I used the command &lt;code&gt;ip a&lt;&#x2F;code&gt; to get the systems DHCP assigned IP address and from then
+on was able to access it via SSH. I also setup my &lt;code&gt;~&#x2F;.ssh&#x2F;authorized_keys&lt;&#x2F;code&gt; so I can ssh to it without a password.&lt;&#x2F;p&gt;
+&lt;p&gt;I completed the final setup steps below using the very handy &lt;code&gt;sudo armbian-config&lt;&#x2F;code&gt; command:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Upgrade the system firmware&lt;&#x2F;li&gt;
+&lt;li&gt;Configure SSH to disable &lt;code&gt;root&lt;&#x2F;code&gt; and &lt;code&gt;password&lt;&#x2F;code&gt; login&lt;&#x2F;li&gt;
+&lt;li&gt;Set my local timezone&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;When I tried to configure the WiFi interface I got disconnected and had to hard reboot the system. I need to do more 
+research to figure out if there&#x27;s a way to get the WiFi module to work with Linux. I read somewhere that it&#x27;s currently 
+only supported for Android.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;notmandatory.org&#x2F;rockpro64-pt1&#x2F;rockpro64.jpg&quot; alt=&quot;rockpro64&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>Regtest docker-compose Repo</title>
+            <pubDate>Mon, 27 Jan 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/regtest-box/</link>
+            <guid>https://notmandatory.org/regtest-box/</guid>
+            <description>&lt;p&gt;I&#x27;ve been playing around with the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;jimpo&#x2F;bitcoin&#x2F;tree&#x2F;bip157-net&quot;&gt;jimpo&#x2F;bitcoin bip157-net&lt;&#x2F;a&gt; fork
+of bitcoind so I created a little docker-compose regtest network for it. Here&#x27;s the link for anyone  who wants to try it. 
+You can use any &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;bitcoin&#x2F;bitcoin&quot;&gt;bitcoin&#x2F;bitcoin&lt;&#x2F;a&gt; fork by changing the Dockerfile.&lt;&#x2F;p&gt;
+&lt;p&gt;See my &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;notmandatory&#x2F;bitcoin-regtest-box&quot;&gt;notmandatory&#x2F;bitcoin-regtest-box&lt;&#x2F;a&gt; repo.&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>Zola Refresh</title>
+            <pubDate>Sun, 12 Jan 2020 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/zola-refesh/</link>
+            <guid>https://notmandatory.org/zola-refesh/</guid>
+            <description>&lt;p&gt;Oops, looks like I didn&#x27;t posted anything here in 2019 but in 2020 I have some fun projects on my radar that I want to write about, 
+starting with today&#x27;s refresh of this blog to use &lt;a href=&quot;https:&#x2F;&#x2F;getzola.org&quot;&gt;Zola&lt;&#x2F;a&gt; instead of Jekyll. My primary reasons for 
+switching to Zola are: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;it&#x27;s written in &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;&quot;&gt;Rust&lt;&#x2F;a&gt; which is a language I want to use more this year&lt;&#x2F;li&gt;
+&lt;li&gt;I like the directory structure and configuration, it&#x27;s simpler&lt;&#x2F;li&gt;
+&lt;li&gt;there&#x27;s an easy to use GitHub action to publish new content as it&#x27;s merged&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;See the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;notmandatory&#x2F;notmandatory.org&quot;&gt;Github page&lt;&#x2F;a&gt; for this site for all the details.  &lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>Podcasts</title>
+            <pubDate>Sat, 11 Aug 2018 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/podcasts/</link>
+            <guid>https://notmandatory.org/podcasts/</guid>
+            <description>&lt;p&gt;Here&#x27;s a short list of podcasts I&#x27;m listening to these days :&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.stitcher.com&#x2F;podcast&#x2F;you-me-and-btc&#x2F;the-coin-pod&quot;&gt;The Coin Pod&lt;&#x2F;a&gt;, Conversations with individuals actively contributing to the development of Bitcoin&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;cryptovoices.com&#x2F;&quot;&gt;Crypto Voices&lt;&#x2F;a&gt;, interviews focused on Bitcoin, blockchain, cryptocurrency, and broader FinTech&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;letstalkbitcoin.com&#x2F;blog&#x2F;category&#x2F;episodes&quot;&gt;Let&#x27;s Talk Bitcoin&lt;&#x2F;a&gt;, a Bitcoin classic, I&#x27;ve been a listener since early days&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;noded.org&quot;&gt;Noded&lt;&#x2F;a&gt;, Bitcoin current events, technical news, and commentary&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;reason.com&#x2F;reasontv&quot;&gt;ReasonTV&lt;&#x2F;a&gt;, Libertarian&#x27;s talking news of the day&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;talesfromthecrypt.libsyn.com&quot;&gt;Tales from the Crypt&lt;&#x2F;a&gt;, Marty Bent discusses Bitcoin with interesting people&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;twit.tv&#x2F;shows&#x2F;security-now&quot;&gt;Security Now&lt;&#x2F;a&gt;, Steve Gibson discusses the hot topics in security today with Leo Laporte&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Current podcast app:
+&lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=com.google.android.apps.podcasts&amp;amp;hl=en_US&quot;&gt;Google Podcasts&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</description>
+        </item>
+        <item>
+            <title>Mastodon</title>
+            <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/mastodon/</link>
+            <guid>https://notmandatory.org/mastodon/</guid>
+            <description>&lt;p&gt;I just joined mastodon fediverse via the &lt;a href=&quot;https:&#x2F;&#x2F;bitcoinhackers.org&quot;&gt;bitcoinhackers.org&lt;&#x2F;a&gt;
+server, you can find me there at &lt;a href=&quot;https:&#x2F;&#x2F;bitcoinhackers.org&#x2F;web&#x2F;accounts&#x2F;700&quot;&gt;@notmandatory@bitcoinhackers.org&lt;&#x2F;a&gt;.
+A big thanks to &lt;a href=&quot;https:&#x2F;&#x2F;bitcoinhackers.org&#x2F;web&#x2F;accounts&#x2F;1&quot;&gt;@nvk@bitcoinhackers.org&lt;&#x2F;a&gt; for
+setting up the server and creating a great community.&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>New Email and GPG Public Key</title>
+            <pubDate>Thu, 12 Nov 2015 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/new-email/</link>
+            <guid>https://notmandatory.org/new-email/</guid>
+            <description>&lt;p&gt;I&#x27;ve just discovered google&#x27;s awesome new &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Google_Domains&quot;&gt;DNS domain service&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;domains.google.com&#x2F;&quot;&gt;Google Domains&lt;&#x2F;a&gt;.  It&#x27;s much easier to use and cheaper than the one I was using before and includes free private registration, domain forwarding and email forwarding.  I&#x27;ve thus also created a new email address &lt;a href=&quot;mailto:steve@notmandatory.org&quot;&gt;steve@notmandatory.org&lt;&#x2F;a&gt; and corresponding new &lt;a href=&quot;&#x2F;static&#x2F;steve_notmandatory.gpg&quot;&gt;gpg public key&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</description>
+        </item>
+        <item>
+            <title>Hello World</title>
+            <pubDate>Wed, 19 Aug 2015 00:00:00 +0000</pubDate>
+            <link>https://notmandatory.org/hello-world/</link>
+            <guid>https://notmandatory.org/hello-world/</guid>
+            <description>&lt;p&gt;Welcome to my new blog. Here I will sporadically comment on the software projects I am working on.
+You will also find here my current contact information.&lt;&#x2F;p&gt;
+</description>
+        </item>
+    </channel>
+</rss>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Not Mandatory</title>
+    <meta name="description"
+          content="Steve Myers blog and current contact information.">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/fa-all.css">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/icon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon/favicon-16x16.png">
+    <link rel="manifest" href="/img/icon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/img/icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="wrapper">
+
+        <a class="site-title" href="https:&#x2F;&#x2F;notmandatory.org/">
+            <img src="/img/notmandatory.jpg" alt="Not Mandatory">
+        </a>
+
+        <nav class="site-nav">
+            <div class="trigger">
+                
+                <a class="page-link" href="https:&#x2F;&#x2F;notmandatory.org&#x2F;">Home</a>
+                
+                
+                
+                
+                <a class="page-link" href="https:&#x2F;&#x2F;notmandatory.org&#x2F;about&#x2F;">About</a>
+                
+                
+                
+            </div>
+        </nav>
+
+    </div>
+
+</header>
+
+<div class="page-content">
+    <div class="wrapper">
+
+        
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">ROCKPro64 System, Part 1</h1>
+    <p class="post-meta">Mar 14, 2020</p>
+  </header>
+
+  <article class="post-content">
+    <p>Back in Jan I finally ordered a ROCKPro64. My goal with this system is to create a small quiet 
+linux system that I can use to host a Bitcoin full node. I over provisioned it a bit so I can use it 
+to self host other (TBD) services in the future. The core hardware I purchased directly from 
+<a href="https://www.pine64.org/rockpro64/">Pine64</a>, the parts list is:</p>
+<table><thead><tr><th>Product</th><th style="text-align: center">Quantity</th><th style="text-align: right">Price</th></tr></thead><tbody>
+<tr><td>ROCKPro64 4GB Single Board Computer</td><td style="text-align: center">1</td><td style="text-align: right">$79.99</td></tr>
+<tr><td>ROCKPro64 2x2 MIMO Dual Band WIFI 802.11AC/BLUETOOTH 4.2 MODULE</td><td style="text-align: center">1</td><td style="text-align: right">$15.99</td></tr>
+<tr><td>ROCKPro64 30mm Tall Profile Heatsink</td><td style="text-align: center">1</td><td style="text-align: right">$3.49</td></tr>
+<tr><td>ROCKPro64 Metal Desktop/NAS Casing</td><td style="text-align: center">1</td><td style="text-align: right">$44.99</td></tr>
+<tr><td>ROCKPro64 12V 5A US POWER SUPPLY</td><td style="text-align: center">1</td><td style="text-align: right">$12.99</td></tr>
+<tr><td>ROCKPro64 PCI-e to Dual SATA-II Interface Card</td><td style="text-align: center">1</td><td style="text-align: right">$9.99</td></tr>
+<tr><td>64GB CLASS10 MICROSD CARD</td><td style="text-align: center">1</td><td style="text-align: right">$20.99</td></tr>
+<tr><td>128GB eMMC Module</td><td style="text-align: center">1</td><td style="text-align: right">$54.95</td></tr>
+<tr><td>USB Adapter for eMMC Module</td><td style="text-align: center">1</td><td style="text-align: right">$4.99</td></tr>
+<tr><td>Fan for ROCKPro64 Metal Desktop/NAS casing</td><td style="text-align: center">1</td><td style="text-align: right">$3.99</td></tr>
+</tbody></table>
+<p><br><br>
+I also bought two Samsung SSD drives from <a href="https://www.amazon.com/gp/product/B078DPCY3T">Amazon</a>:
+<br><br></p>
+<table><thead><tr><th>Product</th><th style="text-align: center">Quantity</th><th style="text-align: right">Price</th></tr></thead><tbody>
+<tr><td>Samsung SSD 860 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-76E1T0B/AM)</td><td style="text-align: center">2</td><td style="text-align: right">$246.22</td></tr>
+</tbody></table>
+<p><br><br>
+Unfortunately half the parts I ordered from Pine64 were mistakenly omitted from my first shipment. Then due to the 
+Lunar New Year and the COVID-19 epidemic in China the remaining parts were delayed until just last week. I have to 
+commend the Pine64 support team for doing their best in a difficult situation. </p>
+<p>For hardware assembly instructions I used the <a href="https://wiki.pine64.org/index.php/ROCKPro64">RockPro64 wiki page</a>
+and in particular the <a href="https://wiki.pine64.org/index.php/ROCKPro64#The_NAS_Case_for_the_ROCKPro64">NAS Case page</a>. I found
+the youtube video <a href="https://youtu.be/_UeeklKo0Og">&quot;PINE64 ROCKPro64 NAS Case Getting Started&quot;</a> from ameriDroid very helpful.</p>
+<p>For the OS install I first installed <a href="https://etcher.io/">Etcher</a> on my laptop, and then downloaded the 
+<a href="https://www.armbian.com/rockpro64/">Armbian Buster</a> image and loaded it onto my eMMC module using my eMMC USB adapter.
+This process was very easy, just select the image, select the empty eMMC removable drive, and go. Once written I 
+removed the eMMC from the USB adapter and plugged it into the ROCK64Pro board. Attaching the module to the board is a little 
+tricky because it is a very small connector. If I were to do this again I'd install the eMMC and the WiFi boards on the
+main ROCKPro64 board before putting the main board it into the NAS case. </p>
+<p>Next I connected my ROCKPro64 to an ethernet switch and plugged in its power supply. I also attached a HDMI monitor and 
+USB keyboard. To my surprise the system came right up, first try. On start-up I was prompted to set the root password and
+setup my first user account. Next I used the command <code>ip a</code> to get the systems DHCP assigned IP address and from then
+on was able to access it via SSH. I also setup my <code>~/.ssh/authorized_keys</code> so I can ssh to it without a password.</p>
+<p>I completed the final setup steps below using the very handy <code>sudo armbian-config</code> command:</p>
+<ol>
+<li>Upgrade the system firmware</li>
+<li>Configure SSH to disable <code>root</code> and <code>password</code> login</li>
+<li>Set my local timezone</li>
+</ol>
+<p>When I tried to configure the WiFi interface I got disconnected and had to hard reboot the system. I need to do more 
+research to figure out if there's a way to get the WiFi module to work with Linux. I read somewhere that it's currently 
+only supported for Android.</p>
+<p><img src="https://notmandatory.org/rockpro64-pt1/rockpro64.jpg" alt="rockpro64" /></p>
+
+  </article>
+
+</div>
+
+
+    </div>
+</div>
+
+<footer class="site-footer">
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col  footer-col-1">
+                <ul class="contact-list">
+                    <li><a href="mailto:steve@notmandatory.org">steve@notmandatory.org</a></li>
+                    
+                    <li>gpg fingerprint: D9FF 9010 BE16 9B64 D3ED  CBF9 8105 A46B 22C2 D051</li>
+                    
+                </ul>
+            </div>
+
+            <div class="footer-col  footer-col-2">
+                <ul class="social-media-list">
+                    
+                    
+                    <li>
+                        <a href="https://github.com/notmandatory">
+                            <span class="fab fa-github fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://bitcoinhackers.org/@notmandatory">
+                            <span class="fab fa-mastodon fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                            <span class="username">@bitcoinhackers.org</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/notmandatory">
+                            <span class="fab fa-twitter-square fa-lg"></span>
+                            <span class="username">notmandatory</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="&#x2F;steve_notmandatory.gpg">
+                            <span class="fas fa-user-secret fa-lg"></span>
+                            <span class="username">gpg public key</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <div class="footer-col  footer-col-3">
+                <p class="text">Steve Myers blog and current contact information.</p>
+            </div>
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
